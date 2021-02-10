@@ -61,8 +61,25 @@ exports.deleteToDo = (req, res) => {
 		})
 		.then(() => {
 			res.json({ message: "Delete Successful" });
-		}).catch(err => {
-      console.error(err);
-      return res.status(500).json({error: err.code})
-    })
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json({ error: err.code });
+		});
+};
+
+exports.editToDo = (req, res) => {
+	if (req.body.todoId || req.body.createdAt) {
+		res.status(403) / json({ message: "Not allowed to edit" });
+	}
+	let document = db.collection("todos").doc(`/todos/${req.params.todoId}`);
+	document
+		.update(req.body)
+		.then(() => {
+			res.json({ message: "Updated successfully" });
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json({ error: err.code });
+		});
 };
