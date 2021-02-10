@@ -48,3 +48,21 @@ exports.postOneToDo = (request, response) => {
 			console.error(err);
 		});
 };
+
+exports.deleteToDo = (req, res) => {
+	const document = db.doc(`/todos/${req.params.todoId}`);
+	document
+		.get()
+		.then((doc) => {
+			if (!doc.exists) {
+				return res.status(404).json({ error: "Todo not found" });
+			}
+			return document.delete();
+		})
+		.then(() => {
+			res.json({ message: "Delete Successful" });
+		}).catch(err => {
+      console.error(err);
+      return res.status(500).json({error: err.code})
+    })
+};
